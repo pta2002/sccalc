@@ -1,8 +1,6 @@
-<h2>Valor</h2>
-
 <div class="input-group">
-    <input type="text" placeholder="Número" bind:value={numberText} class="form-control col-md-10">
-    <input type="number" placeholder="Base" min="2" step="1" bind:value={base} class="form-control col-md-2">
+    <input type="text" placeholder="Número" bind:value={numberText} class="form-control col-sm-10">
+    <input type="number" placeholder="Base" min="2" step="1" bind:value={base} class="form-control col-sm-2">
 </div>
 
 {#if representacoes.length > 0}
@@ -13,6 +11,11 @@
                     <div class="col-sm-11">
                         {#if repr.name == "base"}
                             <ValorEmBase bind:repr={repr} number={number}></ValorEmBase>
+                        {:else if repr.name == "comp1"}
+                            <Comp comp="1" bind:repr={repr} number={number}></Comp>
+                        {:else}
+                            <h5>Coming soon</h5>
+                            <p class="text-muted">Esta representação ainda não foi implementada</p>
                         {/if}
                     </div>
                     <div class="col-sm-1">
@@ -29,7 +32,15 @@
     </div>
 {/if}
 
-<button class="btn btn-primary w-100" on:click={addRepr}><i class="fas fa-plus"></i></button>
+<div class="input-group">
+    <select class="custom-select col-sm-10" bind:value={add}>
+        <option selected value="base">Representação em base ...</option>
+        <option value="comp1">Complemento para 1</option>
+        <option value="comp2">Complemento para 2</option>
+        <option value="float">Float IEEE 754</option>
+    </select>
+    <button class="btn btn-primary col-sm-2 form-control" on:click={addRepr}><i class="fas fa-plus"></i></button>
+</div>
 
 <style>
     .card {
@@ -47,15 +58,18 @@
 
 <script>
     import ValorEmBase from './ValorEmBase.svelte';
+    import Comp from './Comp.svelte';
+
+    import {readNum} from './helper';
 
     let numberText = "";
     let base = 10;
     let number;
+    let add;
 
     let representacoes = [
         {name: "base", base: 2},
-        {name: "base", base: 10},
-        {name: "base", base: 16},
+        {name: "comp1", bits: 8},
     ];
 
     let error = "";
@@ -70,51 +84,19 @@
         }
     }
 
-    function readNum(num, base) {
-        num = num.trim().toLowerCase();
-        if (num.length == 0)
-            return 0;
-
-        let ret = 0;
-        let sign = num[0] == "-" ? -1 : 1;
-
-        if (sign < 0) {
-            num = num.substr(1);
-        }
-
-        let charsUntilPoint = num.split(".")[0].length;
-
-        let exp = charsUntilPoint - 1;
-
-        for (let i = 0; i < num.length; i++) {
-            if (num[i] == '.') continue;
-
-            let digit;
-            if ('0' <= num[i] && num[i] <= '9') {
-                digit = parseInt(num[i]);
-            } else if ('a' <= num[i] && num[i] <= 'z') {
-                digit = 10 + num[i].charCodeAt(0) - 97;
-            } else {
-                return "Erro: Número inválido!";
-            }
-
-            if (digit >= base) {
-                return "Erro: Não pertence à base!"
-            }
-
-            ret += Math.pow(base, exp) * digit;
-            exp--;
-        }
-
-        return ret * sign;
-    }
-
     function deleteRepr(i) {
         representacoes.splice(i, 1);
         representacoes = representacoes;
     }
 
     function addRepr() {
-        representacoes = [ ...representacoes, {name: "base", base: 10} ];
+        let repr = {name: add};
+
+        if (add == "base")
+            repr.base = 10;
+        else if (add == "comp1" || add == "comp2")
+            repr.bits = 8;
+
+        representacoes = [ ...representacoes, repr ];
     }
 </script>
