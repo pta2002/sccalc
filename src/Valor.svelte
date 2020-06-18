@@ -1,26 +1,74 @@
 <h2>Valor</h2>
 
-<input type="text" placeholder="Número" bind:value={numberText}>
-<input type="number" placeholder="Base" min="2" step="1" bind:value={base}>
+<div class="input-group">
+    <input type="text" placeholder="Número" bind:value={numberText} class="form-control col-md-10">
+    <input type="number" placeholder="Base" min="2" step="1" bind:value={base} class="form-control col-md-2">
+</div>
 
-{#each representacoes as {name, val}}
-    {#if name == "base"}
-        <h3>Valor em base {val}: { showNum(number, val) }</h3>
-    {/if}
-{/each}
+{#if representacoes.length > 0}
+    {#each representacoes as repr, i}
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-11">
+                        {#if repr.name == "base"}
+                            <ValorEmBase bind:repr={repr} number={number}></ValorEmBase>
+                        {/if}
+                    </div>
+                    <div class="col-sm-1">
+                        <div on:click={()=>deleteRepr(i)} class="text-danger del"><i class="fas fa-trash"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {/each}
+{:else}
+    <div class="my-3 font-italic">
+        <h5>Não há nenhuma representação!</h5>
+        <p class="text-muted">Clica no botão em baixo para adicionar uma</p>
+    </div>
+{/if}
+
+<button class="btn btn-primary w-100" on:click={addRepr}><i class="fas fa-plus"></i></button>
+
+<style>
+    .card {
+        margin: 1rem 0;
+    }
+
+    .del {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+</style>
 
 <script>
+    import ValorEmBase from './ValorEmBase.svelte';
+
     let numberText = "";
     let base = 10;
     let number;
 
     let representacoes = [
-        {name: "base", val: 2},
-        {name: "base", val: 10},
-        {name: "base", val: 16},
+        {name: "base", base: 2},
+        {name: "base", base: 10},
+        {name: "base", base: 16},
     ];
 
-    $: number = readNum(numberText, base);
+    let error = "";
+
+    $: {
+        number = readNum(numberText, base);
+        if (typeof number == "string") {
+            error = number;
+            number = 0;
+        } else {
+            error = "";
+        }
+    }
 
     function readNum(num, base) {
         num = num.trim().toLowerCase();
@@ -61,52 +109,12 @@
         return ret * sign;
     }
 
-    function showNum(num, base) {
-        let ret = "";
-        let sign = "";
-        let afterPoint = "";
+    function deleteRepr(i) {
+        representacoes.splice(i, 1);
+        representacoes = representacoes;
+    }
 
-        if (num < 0) {
-            sign = "-";
-            num *= -1;
-        }
-
-        // Primeiro a parte depois do ponto
-        let int = Math.floor(num);
-        let frac = num - int;
-        let i = 0; // TODO problemas com floating point, provavelmente tenho de guardar os numeros de outra forma
-
-        while (frac != 0 && i < 16) {
-            let x = frac * base;
-            let digit = Math.floor(x);
-
-            if (digit < 10) {
-                digit = digit.toString();
-            } else {
-                digit = String.fromCharCode(digit + 55);
-            }
-
-            afterPoint += digit;
-            frac = x - digit;
-            i++;
-        }
-
-        if (afterPoint != "")
-            afterPoint = "." + afterPoint;
-        
-        while (int != 0) {
-            let digit = int % base;
-
-            if (digit < 10) {
-                digit = digit.toString();
-            } else {
-                digit = String.fromCharCode(digit + 55);
-            }
-
-            ret = digit + ret;
-            int = Math.floor(int / base);
-        }
-
-        return sign + ret + afterPoint;
+    function addRepr() {
+        representacoes = [ ...representacoes, {name: "base", base: 10} ];
     }
 </script>
