@@ -1,4 +1,7 @@
 export function readNum(num, base) {
+    if (base <= 1 || base > 36)
+        return "Erro: base inválida";
+
     num = num.trim().toLowerCase();
     if (num.length == 0)
         return 0;
