@@ -42,7 +42,7 @@ export function readNum(num, base) {
 
 export function showNum(num, base) {
     if (base <= 1 || base > 36)
-        return "Erro: base inválida";
+        return 0;
 
     let ret = "";
     let sign = "";
