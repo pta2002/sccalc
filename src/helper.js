@@ -41,53 +41,56 @@ export function readNum(num, base) {
 }
 
 export function showNum(num, base) {
-        let ret = "";
-        let sign = "";
-        let afterPoint = "";
+    if (base <= 1 || base > 36)
+        return "Erro: base inválida";
 
-        if (num < 0) {
-            sign = "-";
-            num *= -1;
-        }
+    let ret = "";
+    let sign = "";
+    let afterPoint = "";
 
-        // Primeiro a parte depois do ponto
-        let int = Math.floor(num);
-        let frac = num - int;
-        let i = 0; // TODO problemas com floating point, provavelmente tenho de guardar os numeros de outra forma
-
-        while (frac != 0 && i < 16) {
-            let x = frac * base;
-            let digit = Math.floor(x);
-
-            if (digit < 10) {
-                digit = digit.toString();
-            } else {
-                digit = String.fromCharCode(digit + 55);
-            }
-
-            afterPoint += digit;
-            frac = x - digit;
-            i++;
-        }
-
-        if (afterPoint != "")
-            afterPoint = "." + afterPoint;
-        
-        if (int == 0)
-            ret = "0";
-
-        while (int != 0) {
-            let digit = int % base;
-
-            if (digit < 10) {
-                digit = digit.toString();
-            } else {
-                digit = String.fromCharCode(digit + 55);
-            }
-
-            ret = digit + ret;
-            int = Math.floor(int / base);
-        }
-
-        return sign + ret + afterPoint;
+    if (num < 0) {
+        sign = "-";
+        num *= -1;
     }
+
+    // Primeiro a parte depois do ponto
+    let int = Math.floor(num);
+    let frac = num - int;
+    let i = 0; // TODO problemas com floating point, provavelmente tenho de guardar os numeros de outra forma
+
+    while (frac != 0 && i < 16) {
+        let x = frac * base;
+        let digit = Math.floor(x);
+
+        if (digit < 10) {
+            digit = digit.toString();
+        } else {
+            digit = String.fromCharCode(digit + 55);
+        }
+
+        afterPoint += digit;
+        frac = x - digit;
+        i++;
+    }
+
+    if (afterPoint != "")
+        afterPoint = "." + afterPoint;
+    
+    if (int == 0)
+        ret = "0";
+
+    while (int != 0) {
+        let digit = int % base;
+
+        if (digit < 10) {
+            digit = digit.toString();
+        } else {
+            digit = String.fromCharCode(digit + 55);
+        }
+
+        ret = digit + ret;
+        int = Math.floor(int / base);
+    }
+
+    return sign + ret + afterPoint;
+}
