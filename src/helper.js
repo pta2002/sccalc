@@ -1,5 +1,5 @@
 export function readNum(num, base) {
-    if (base <= 1 || base > 36)
+    if (typeof base !== "number" || base <= 1 || base > 36)
         return "Erro: base inválida";
 
     num = num.trim().toLowerCase();
@@ -41,7 +41,7 @@ export function readNum(num, base) {
 }
 
 export function showNum(num, base) {
-    if (base <= 1 || base > 36)
+    if (typeof num !== "number" || typeof base !== "number" || base <= 1 || base > 36)
         return 0;
 
     let ret = "";
