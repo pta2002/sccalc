@@ -9,6 +9,7 @@
         <div><strong>Valor original em binário: </strong> <pre>{ binOrig }</pre></div>
         {#if comp == 1}
             <div><strong>Complemento para 1 em binário: </strong> <pre>{ comp1 }</pre></div>
+            <div><strong>Representação em complemento para 1: </strong> <pre>{#if number < 0} { comp1 } {:else} {binOrig} {/if}</pre></div>
         {:else}
             <div>
                 <strong>Complemento para 2 em binário: </strong>
@@ -17,6 +18,7 @@
                 {:else}
                     <p class="text-danger">0 não tem complemento para 2</p>
                 {/if}
+                <div><strong>Representação em complemento para 2: </strong> <pre>{#if number < 0} { comp2 } {:else} {binOrig} {/if}</pre></div>
             </div>
         {/if}
         <div><strong>Valor real (assumindo que o input é representado em complemento para {comp}): </strong> <pre>{ real }</pre></div>
