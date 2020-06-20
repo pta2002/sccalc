@@ -24,11 +24,11 @@
 </div>
 
 <div>
-    <strong>Mantissa:</strong> <pre>0b{mantissa}</pre>
+    <strong>Mantissa:</strong> <pre>{mantissa}</pre>
 </div>
 
 <div>
-    <strong>Expoente:</strong> <pre>0b{exponentbin} = {exponent} ({exponent} - {excess} = {exponent - excess})</pre>
+    <strong>Expoente:</strong> <pre>{exponentbin} = {exponent} ({exponent} - {excess} = {exponent - excess})</pre>
 </div>
 
 <div>
