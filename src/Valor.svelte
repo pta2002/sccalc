@@ -13,6 +13,8 @@
                             <ValorEmBase bind:repr={repr} number={number}></ValorEmBase>
                         {:else if repr.name == "comp1"}
                             <Comp comp="1" bind:repr={repr} number={number}></Comp>
+                        {:else if repr.name == "comp2"}
+                            <Comp comp="2" bind:repr={repr} number={number}></Comp>
                         {:else}
                             <h5>Coming soon</h5>
                             <p class="text-muted">Esta representação ainda não foi implementada</p>
@@ -70,6 +72,7 @@
     let representacoes = [
         {name: "base", base: 2},
         {name: "comp1", bits: 8},
+        {name: "comp2", bits: 8},
     ];
 
     let error = "";

@@ -7,17 +7,29 @@
         <p class="text-danger">Overflow: Input tem {comp1.length} bits</p>
     {:else}
         <div><strong>Valor original em binário: </strong> <pre>{ binOrig }</pre></div>
-        <div><strong>Complemento para 1 em binário: </strong> <pre>{ comp1 }</pre></div>
+        {#if comp == 1}
+            <div><strong>Complemento para 1 em binário: </strong> <pre>{ comp1 }</pre></div>
+        {:else}
+            <div>
+                <strong>Complemento para 2 em binário: </strong>
+                {#if number != 0}
+                    <pre>{ comp2 }</pre>
+                {:else}
+                    <p class="text-danger">0 não tem complemento para 2</p>
+                {/if}
+            </div>
+        {/if}
         <div><strong>Valor real (assumindo que o input é representado em complemento para {comp}): </strong> <pre>{ real }</pre></div>
     {/if}
 {/if}
 
 <script>
-    import {showNum} from './helper';
+    import {showNum, readNum} from './helper';
     export let repr, comp, number;
 
     let binOrig;
     let comp1;
+    let comp2;
     let real;
 
     $: {
@@ -28,11 +40,20 @@
         }
 
         comp1 = flip(binOrig);
+        comp2 = showNum(readNum(comp1, 2) + 1, 2).padStart(repr.bits, "0");
 
-        if (comp1[0] == "0") {
-            real = -number;
+        if (comp == 1) {
+            if (comp1[0] == "0") {
+                real = -readNum(comp1, 2);
+            } else {
+                real = number;
+            }
         } else {
-            real = number;
+            if (comp2[0] == "0") {
+                real = -readNum(comp2, 2);
+            } else {
+                real = number;
+            }
         }
     }
 
