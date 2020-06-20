@@ -94,3 +94,43 @@ export function showNum(num, base) {
 
     return sign + ret + afterPoint;
 }
+
+export function normalize(num) {
+    // Takes in a string of a binary number, returns {n: number, e: exponent}
+    let exp = 0, ret;
+    let [int, frac] = num.split(".");
+    let charsUntilPoint = int.length;
+
+    if (int[0] !== "0") {
+        ret = int.slice(0, 1)
+        
+        if (charsUntilPoint > 1 || (frac !== "" && typeof frac !== "undefined")) {
+            ret += "." + int.slice(1) + (frac == undefined ? "" : frac);
+        } else {
+            ret += ".0";
+        }
+        exp = charsUntilPoint - 1;
+    } else if (typeof frac === "undefined") {
+        return {n: "0.0", e: 0};
+    } else {
+        let firstOne = 0;
+        while (frac[firstOne] === "0"  && firstOne < frac.length) {
+            firstOne++;
+        }
+
+        if (firstOne == frac.length) {
+            // It's a 0
+            return {n: "0.0", e: 0};
+        }
+
+        ret = frac.slice(firstOne, firstOne+1)
+        if (frac.slice(firstOne + 1) !== "") {
+            ret += "." + frac.slice(firstOne+1);
+        } else {
+            ret += ".0";
+        }
+        exp = -firstOne - 1;
+    }
+
+    return {n: ret, e: exp};
+}

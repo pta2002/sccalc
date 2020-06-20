@@ -15,6 +15,8 @@
                             <Comp comp="1" bind:repr={repr} number={number}></Comp>
                         {:else if repr.name == "comp2"}
                             <Comp comp="2" bind:repr={repr} number={number}></Comp>
+                        {:else if repr.name == "float"}
+                            <Float bind:repr={repr} number={number}></Float>
                         {:else}
                             <h5>Coming soon</h5>
                             <p class="text-muted">Esta representação ainda não foi implementada</p>
@@ -61,6 +63,7 @@
 <script>
     import ValorEmBase from './ValorEmBase.svelte';
     import Comp from './Comp.svelte';
+    import Float from './Float.svelte';
 
     import {readNum} from './helper';
 
@@ -73,6 +76,7 @@
         {name: "base", base: 2},
         {name: "comp1", bits: 8},
         {name: "comp2", bits: 8},
+        {name: "float", mbits: 23, ebits: 8},
     ];
 
     let error = "";
@@ -99,6 +103,10 @@
             repr.base = 10;
         else if (add == "comp1" || add == "comp2")
             repr.bits = 8;
+        else if (add == "float") {
+            repr.mbits = 23
+            repr.ebits = 8
+        }
 
         representacoes = [ ...representacoes, repr ];
     }
