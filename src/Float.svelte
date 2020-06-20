@@ -24,16 +24,16 @@
 </div>
 
 <div>
-    <strong>Mantissa:</strong> <pre>{mantissa}</pre>
+    <strong>Mantissa:</strong> <pre>0b{mantissa}</pre>
 </div>
 
 <div>
-    <strong>Expoente:</strong> <pre>{exponent} ({exponent} - {excess} = {exponent - excess})</pre>
+    <strong>Expoente:</strong> <pre>0b{exponentbin} = {exponent} ({exponent} - {excess} = {exponent - excess})</pre>
 </div>
 
 <div>
     <strong>Bits finais:</strong>
-    <pre>{sign} {showNum(exponent, 2).padStart(repr.ebits, "0")} {mantissa}</pre>
+    <pre>{sign} {exponentbin} {mantissa}</pre>
 </div>
 
 <script>
@@ -41,18 +41,20 @@
 
     export let repr, number;
 
-    let excess, sign, mantissa, exponent;
+    let excess, sign, mantissa, exponent, exponentbin;
 
     $: excess = Math.pow(2, repr.ebits - 1) - 1
     $: {
         sign = number < 0 ? 1 : 0;
         let bin = showNum(Math.abs(number), 2);
         let normalized = normalize(bin);
-        console.log(bin, normalized);
-        mantissa = normalized.n.split(".")[1].padEnd(repr.mbits, "0");
+        mantissa = normalized.n.split(".")[1].slice(0, repr.mbits).padEnd(repr.mbits, "0");
         if (normalized.n[0] == "0")
             exponent = 0;
         else
-            exponent = normalized.e + excess;
+            exponent = Math.min(normalized.e + excess, Math.pow(2, repr.ebits) - 1);
+        
+        console.log(showNum(exponent, 2), showNum(exponent, 2).slice(0, repr.ebits), repr.ebits);
+        exponentbin = showNum(exponent, 2).padStart(repr.ebits, "0");
     }
 </script>
