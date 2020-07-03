@@ -43,18 +43,18 @@
 
     let excess, sign, mantissa, exponent, exponentbin;
 
-    $: excess = Math.pow(2, repr.ebits - 1) - 1
+    $: excess = Math.pow(2, (repr.ebits || 0) - 1) - 1
     $: {
         sign = number < 0 ? 1 : 0;
         let bin = showNum(Math.abs(number), 2);
         let normalized = normalize(bin);
-        mantissa = normalized.n.split(".")[1].slice(0, repr.mbits).padEnd(repr.mbits, "0");
+        mantissa = normalized.n.split(".")[1].slice(0, (repr.mbits || 1)).padEnd((repr.mbits || 1), "0");
         if (normalized.n[0] == "0")
             exponent = 0;
         else
-            exponent = Math.min(normalized.e + excess, Math.pow(2, repr.ebits) - 1);
+            exponent = Math.min(normalized.e + excess, Math.pow(2, (repr.ebits || 1)) - 1);
         
-        console.log(showNum(exponent, 2), showNum(exponent, 2).slice(0, repr.ebits), repr.ebits);
-        exponentbin = showNum(exponent, 2).padStart(repr.ebits, "0");
+        console.log(showNum(exponent, 2), showNum(exponent, 2).slice(0, (repr.ebits || 1)), (repr.ebits || 1));
+        exponentbin = showNum(exponent, 2).padStart((repr.ebits || 1), "0");
     }
 </script>
