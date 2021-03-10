@@ -4,7 +4,7 @@ Esta calculadora foi feita para ajudar na cadeira de Sistemas de Computação.
 
 Permite converter valores em qualquer base, calcular complementos para 2 de qualquer tamanho, e calcular a representação IEEE 754 de qualquer número.
 
-Está disponivel em [uni.pta2002.com/sc](https://uni.pta2002.com/sc)
+Neste momento não está disponivel em nenhum site, mas se alguém quiser hospedar isto pode-me mandar mensagem e eu coloco aqui um link.
 
 ## Instalar localmente
 
